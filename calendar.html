@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Calendar - TaskNest</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <h2>TaskNest</h2>
+
+        <a href="index.html">Dashboard</a>
+        <a href="task.html">My Tasks</a>
+        <a href="add-task.html">Add Task</a>
+        <a href="calendar.html">Calendar</a>
+        <a href="settings.html">Settings</a>
+
+        <button class="logout">Logout</button>
+      </div>
+
+      <!-- MAIN -->
+      <div class="main">
+        <h1>Calendar 📅</h1>
+
+        <div class="card">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <button onclick="prevMonth()">⬅</button>
+            <h2 id="monthYear"></h2>
+            <button onclick="nextMonth()">➡</button>
+          </div>
+
+          <br />
+
+          <div
+            id="calendar"
+            style="
+              display: grid;
+              grid-template-columns: repeat(7, 1fr);
+              gap: 5px;
+            "
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let date = new Date();
+
+      function renderCalendar() {
+        const calendar = document.getElementById("calendar");
+        const monthYear = document.getElementById("monthYear");
+
+        calendar.innerHTML = "";
+
+        const year = date.getFullYear();
+        const month = date.getMonth();
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const lastDate = new Date(year, month + 1, 0).getDate();
+
+        const months = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+
+        monthYear.innerText = months[month] + " " + year;
+
+        // empty cells before start
+        for (let i = 0; i < firstDay; i++) {
+          let empty = document.createElement("div");
+          calendar.appendChild(empty);
+        }
+
+        // days
+        for (let day = 1; day <= lastDate; day++) {
+          let dayBox = document.createElement("div");
+
+          dayBox.innerText = day;
+          dayBox.style.padding = "10px";
+          dayBox.style.textAlign = "center";
+          dayBox.style.background = "white";
+          dayBox.style.borderRadius = "5px";
+          dayBox.style.cursor = "pointer";
+
+          // highlight today
+          let today = new Date();
+          if (
+            day === today.getDate() &&
+            month === today.getMonth() &&
+            year === today.getFullYear()
+          ) {
+            dayBox.style.background = "#3498db";
+            dayBox.style.color = "white";
+          }
+
+          calendar.appendChild(dayBox);
+        }
+      }
+
+      function nextMonth() {
+        date.setMonth(date.getMonth() + 1);
+        renderCalendar();
+      }
+
+      function prevMonth() {
+        date.setMonth(date.getMonth() - 1);
+        renderCalendar();
+      }
+
+      renderCalendar();
+    </script>
+  </body>
+</html>

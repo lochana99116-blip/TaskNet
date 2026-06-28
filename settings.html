@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Settings - TaskNest</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <h2>TaskNest</h2>
+
+        <a href="index.html">Dashboard</a>
+        <a href="tasks.html">My Tasks</a>
+        <a href="add-task.html">Add Task</a>
+        <a href="calendar.html">Calendar</a>
+        <a href="settings.html">Settings</a>
+
+        <button class="logout">Logout</button>
+      </div>
+
+      <!-- MAIN -->
+      <div class="main">
+        <h1>Settings ⚙️</h1>
+
+        <!-- PROFILE -->
+        <div class="card">
+          <h3>Profile Settings</h3>
+
+          <input id="name" type="text" placeholder="Enter your name" />
+          <input id="email" type="email" placeholder="Enter your email" />
+
+          <button onclick="saveProfile()" class="add-btn">Save Profile</button>
+
+          <p id="profileMsg"></p>
+        </div>
+
+        <!-- THEME -->
+        <div class="card">
+          <h3>Theme Settings</h3>
+
+          <select id="theme">
+            <option value="light">Light Mode</option>
+            <option value="dark">Dark Mode</option>
+          </select>
+
+          <button onclick="changeTheme()" class="add-btn">Apply Theme</button>
+
+          <p id="themeMsg"></p>
+        </div>
+
+        <!-- NOTIFICATIONS -->
+        <div class="card">
+          <h3>Notifications</h3>
+
+          <label>
+            <input type="checkbox" id="notify" />
+            Enable Email Notifications
+          </label>
+
+          <br /><br />
+
+          <button onclick="saveSettings()" class="add-btn">
+            Save Settings
+          </button>
+
+          <p id="notifyMsg"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRIPT -->
+    <script>
+      // SAVE PROFILE
+      function saveProfile() {
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+
+        if (!name || !email) {
+          document.getElementById("profileMsg").innerText =
+            "❌ Please fill all fields";
+          return;
+        }
+
+        localStorage.setItem("userName", name);
+        localStorage.setItem("userEmail", email);
+
+        document.getElementById("profileMsg").innerText = "✅ Profile saved!";
+      }
+
+      // CHANGE THEME
+      function changeTheme() {
+        const theme = document.getElementById("theme").value;
+
+        if (theme === "dark") {
+          document.body.style.background = "#1e1e1e";
+          document.body.style.color = "white";
+        } else {
+          document.body.style.background = "#f4f6f9";
+          document.body.style.color = "black";
+        }
+
+        localStorage.setItem("theme", theme);
+
+        document.getElementById("themeMsg").innerText = "✅ Theme applied!";
+      }
+
+      // SAVE NOTIFICATIONS
+      function saveSettings() {
+        const notify = document.getElementById("notify").checked;
+
+        localStorage.setItem("notifications", notify);
+
+        document.getElementById("notifyMsg").innerText = notify
+          ? "🔔 Notifications enabled"
+          : "🔕 Notifications disabled";
+      }
+
+      // LOAD SAVED SETTINGS
+      window.onload = function () {
+        document.getElementById("name").value =
+          localStorage.getItem("userName") || "";
+
+        document.getElementById("email").value =
+          localStorage.getItem("userEmail") || "";
+
+        const savedTheme = localStorage.getItem("theme");
+
+        if (savedTheme === "dark") {
+          document.body.style.background = "#1e1e1e";
+          document.body.style.color = "white";
+          document.getElementById("theme").value = "dark";
+        }
+
+        const notify = localStorage.getItem("notifications");
+        document.getElementById("notify").checked = notify === "true";
+      };
+    </script>
+  </body>
+</html>

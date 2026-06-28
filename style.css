@@ -1,0 +1,107 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f4f6f9;
+}
+
+.container {
+  display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: #2c3e50;
+  color: white;
+  height: 100vh;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+
+.sidebar a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.sidebar a:hover {
+  background: #34495e;
+}
+
+/* Main */
+.main {
+  flex: 1;
+  padding: 20px;
+}
+
+.header {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* Card */
+.card {
+  background: white;
+  padding: 15px;
+  margin-top: 15px;
+  border-radius: 8px;
+}
+
+/* Task Card */
+.task-card {
+  background: white;
+  padding: 15px;
+  margin-top: 10px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Status */
+.pending {
+  color: orange;
+}
+
+.completed {
+  color: green;
+}
+
+/* Buttons */
+button {
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.add-btn {
+  background: green;
+  color: white;
+  margin-top: 10px;
+}
+
+.complete {
+  background: #3498db;
+  color: white;
+  margin-right: 5px;
+}
+
+.delete {
+  background: red;
+  color: white;
+}
+
+.logout {
+  margin-top: 20px;
+  background: red;
+  color: white;
+  width: 100%;
+}

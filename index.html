@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TaskNest Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <h2>TaskNest</h2>
+
+        <a href="index.html">Dashboard</a>
+        <a href="task.html">My Tasks</a>
+        <a href="add-task.html">Add Task</a>
+        <a href="calendar.html">Calendar</a>
+        <a href="settings.html">Settings</a>
+
+        <button class="logout">Logout</button>
+      </div>
+
+      <!-- MAIN CONTENT -->
+      <div class="main">
+        <!-- HEADER -->
+        <div class="header">
+          <h1>Welcome to TaskNest</h1>
+          <p>Manage your tasks efficiently and stay productive.</p>
+        </div>
+
+        <!-- ADD TASK -->
+        <div class="card">
+          <h3>Add New Task</h3>
+
+          <form id="taskForm">
+            <input type="text" id="title" placeholder="Task title" required />
+
+            <input
+              type="text"
+              id="description"
+              placeholder="Task description"
+              required
+            />
+
+            <select id="status">
+              <option value="Pending">Pending</option>
+              <option value="Completed">Completed</option>
+            </select>
+
+            <button type="submit" class="add-btn">+ Add Task</button>
+          </form>
+
+          <p id="message"></p>
+        </div>
+
+        <h3>My Tasks</h3>
+
+        <div id="taskList"></div>
+
+        <div class="task-card">
+          <div>
+            <h4>Finish Assignment</h4>
+            <p>Web Development Project</p>
+            <span class="pending">Pending</span>
+          </div>
+
+          <div class="buttons">
+            <button class="complete">Complete</button>
+            <button class="delete">Delete</button>
+          </div>
+        </div>
+
+        <div class="task-card">
+          <div>
+            <h4>Learn React</h4>
+            <p>Practice Components</p>
+            <span class="completed">Completed</span>
+          </div>
+
+          <div class="buttons">
+            <button class="complete">Complete</button>
+            <button class="delete">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const form = document.getElementById("taskForm");
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const task = {
+          title: document.getElementById("title").value,
+          description: document.getElementById("description").value,
+          status: document.getElementById("status").value,
+        };
+
+        try {
+          const response = await fetch("http://localhost:3000/tasks", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(task),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to save task");
+          }
+
+          document.getElementById("message").textContent =
+            "  Task added successfully!";
+
+          form.reset();
+        } catch (error) {
+          document.getElementById("message").textContent =
+            " Error adding task.";
+        }
+      });
+    </script>
+
+    <script>
+      const API = "http://localhost:3000/tasks";
+
+      /* LOAD TASKS */
+      async function loadTasks() {
+        const res = await fetch(API);
+        const tasks = await res.json();
+
+        const taskList = document.getElementById("taskList");
+        taskList.innerHTML = "";
+
+        tasks.forEach((task) => {
+          taskList.innerHTML += `
+      <div class="task-card">
+
+        <div>
+          <h4>${task.title}</h4>
+          <p>${task.description}</p>
+
+          <span class="${task.status === "Completed" ? "completed" : "pending"}">
+            ${task.status}
+          </span>
+        </div>
+
+        <div class="buttons">
+
+          <button class="complete" onclick="completeTask('${task._id}')">
+            Complete
+          </button>
+
+          <button class="delete" onclick="deleteTask('${task._id}')">
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+    `;
+        });
+      }
+
+      /* COMPLETE TASK */
+      async function completeTask(id) {
+        try {
+          await fetch(`${API}/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "Completed" }),
+          });
+
+          loadTasks();
+        } catch (err) {
+          console.log("Complete error:", err);
+        }
+      }
+
+      /* DELETE TASK */
+      async function deleteTask(id) {
+        try {
+          await fetch(`${API}/${id}`, {
+            method: "DELETE",
+          });
+
+          loadTasks();
+        } catch (err) {
+          console.log("Delete error:", err);
+        }
+      }
+
+      /* INIT */
+      loadTasks();
+    </script>
+  </body>
+</html>
